@@ -8,6 +8,7 @@ import com.cursos.springsecutirycourse.service.AuthenticationService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,12 +17,14 @@ import java.util.List;
 @RequestMapping("/auth")
 public class AuthenticationController {
 
-     @Autowired
-     private AuthenticationService authenticationService;
+    @Autowired
+    private AuthenticationService authenticationService;
 
-     @Autowired
-     private UserRepository userRepository;
+    @Autowired
+    private UserRepository userRepository;
 
+
+    @PreAuthorize("permitAll")
     @PostMapping("/login")
     public ResponseEntity<AuthenticationResponseDTO> login(
             @RequestBody @Valid AuthenticationRequestDTO authenticationRequestDTO) {
@@ -40,6 +43,7 @@ public class AuthenticationController {
         return ResponseEntity.ok(jwtDTO);
     }
 
+    @PreAuthorize("permitAll")
     @GetMapping("/public-access")
     public String publicAccesoEndpoint() {
         return "este endpoint es publico";
