@@ -1,6 +1,7 @@
 package com.cursos.springsecutirycourse.service;
 
 import com.cursos.springsecutirycourse.entity.User;
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Header;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -41,5 +42,14 @@ public class JwtService {
         byte[] secretAsBytes = Decoders.BASE64.decode(SECRET_KEY);
         System.out.println("mi clave es: " + new String(secretAsBytes));
         return Keys.hmacShaKeyFor(secretAsBytes);
+    }
+
+    public String extractUsername(String jwt) {
+        return extractAllClaims(jwt).getSubject();
+    }
+
+    private Claims extractAllClaims(String jwt) {
+        return Jwts.parserBuilder().setSigningKey(generateKey()).build()
+                .parseClaimsJws(jwt).getBody();
     }
 }
